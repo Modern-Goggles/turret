@@ -3,4 +3,4 @@
 __pycache__/*
 
 # ignore ssd mobilenet files
-ssdMobilenet/*
+ssdMobilenetV3/*
