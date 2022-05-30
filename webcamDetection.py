@@ -1,7 +1,7 @@
 #!/bin/python3
 #runs detection on webcam and writes position to stdout for testing
 import cv2
-import detectConfig
+import constants
 
 # class to smooth out position of detection across frames to avoid shakey aim
 # basically just the moving average function
@@ -63,8 +63,6 @@ class personDetector():
         # run detection
         classIds, confs, bbox = self.network.detect(frame,confThreshold=detectThreshold)
 
-        print(classIds)
-
         # if at least one detection
         if len(classIds) > 0:
             # loop through detections 
@@ -98,7 +96,7 @@ class personDetector():
         return self.xPos, self.yPos
 
 
-detector = personDetector(detectConfig.NETWORK_WEIGHTS_PATH, detectConfig.COCO_CLASS_NAMES, detectConfig.NETWORK_CONFIG_PATH)
+detector = personDetector(constants.NETWORK_WEIGHTS_PATH, constants.COCO_CLASS_NAMES, constants.NETWORK_CONFIG_PATH)
 
 detector.startCamera()
 while True:
