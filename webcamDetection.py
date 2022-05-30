@@ -76,6 +76,8 @@ class personDetector():
                 # ypos = y coordinate + height // 2
                 ypos = box[1] + box[3]//2
                 return xpos, ypos
+        
+        return None, None
 
     def getDetectionPosSmooth(self, ALPHA : float = 0.3, detectThreshold : float = 0.5):
         # initalize smoothers
@@ -87,6 +89,9 @@ class personDetector():
 
         # get pos from 1 frame
         x, y = self.getDetectionPos(detectThreshold)
+
+        if x == None or y == None:
+            return None, None
 
         # smooth over 1/ALPHA frames
         self.xPos = self.xSmoother.smooth(x)
@@ -100,4 +105,5 @@ detector = personDetector(constants.NETWORK_WEIGHTS_PATH, constants.COCO_CLASS_N
 
 detector.startCamera()
 while True:
-    detector.getDetectionPosSmooth()
+    x, y = detector.getDetectionPosSmooth()
+    print(x, y)
