@@ -1,0 +1,6 @@
+
+# ignore pycache files
+__pycache__/*
+
+# ignore ssd mobilenet files
+ssdMobilenetV3/*
