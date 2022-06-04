@@ -1,13 +1,18 @@
+### basic configuration
+# the absolute path to this repository
+# this gets populated automatically by install.sh
+REPO_DIR = ''
+
 ### configuration for detection
 
 # path to config file
-NETWORK_CONFIG_PATH = "ssdMobilenetV3/ssd_mobilenet_v3_large_coco_2020_01_14.pbtxt"
+NETWORK_CONFIG_PATH = f"{REPO_DIR}/ssdMobilenetV3/ssd_mobilenet_v3_large_coco_2020_01_14.pbtxt"
 
 # path to weights file
-NETWORK_WEIGHTS_PATH = "ssdMobilenetV3/frozen_inference_graph.pb"
+NETWORK_WEIGHTS_PATH = f"{REPO_DIR}/ssdMobilenetV3/frozen_inference_graph.pb"
 
 # path to labls file
-LABELS_FILE = "ssdMobilenetV3/coco.names"
+LABELS_FILE = f"{REPO_DIR}/ssdMobilenetV3/coco.names"
 
 # extract coco class names
 COCO_CLASS_NAMES= []

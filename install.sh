@@ -5,6 +5,9 @@
 sudo apt update 
 sudo apt install mpv -y
 
+# set the repo directory variable (REPO_DIR) in constants.py to the current directory
+sed -i "s|REPO_DIR = ''|REPO_DIR = '$PWD'|" constants.py
+
 # download network data
 wget https://github.com/Scott-McKool/turret/releases/download/downloads/ssdMobilenetV3.zip
 # make folder to put contents in
