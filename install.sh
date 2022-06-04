@@ -1,3 +1,4 @@
+#!/usr/bin/bash
 # ths script installs the turret repo with the required dependencies and files
 
 # install dependencies

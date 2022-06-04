@@ -9,6 +9,6 @@ clone the repository \
 enter the repository \
 ```cd turret``` \
 make the install script executable \
-``` chmod +x install ``` \
+``` chmod +x install.sh``` \
 run the install script \
 ```./install.sh```
