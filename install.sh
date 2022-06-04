@@ -3,7 +3,7 @@
 
 # install dependencies
 sudo apt update 
-sudo apt install mpv -y
+sudo apt install python3-opencv=4.5.1+dfsg-5 mpv=0.32.0-3 -y
 
 # set the repo directory variable (REPO_DIR) in constants.py to the current directory
 sed -i "s|REPO_DIR = ''|REPO_DIR = '$PWD'|" constants.py
