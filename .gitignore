@@ -1,6 +1,9 @@
 
 # ignore pycache files
-__pycache__/*
+__pycache__/
+
+# ignore sounds folder
+sounds/
 
 # ignore ssd mobilenet files
-ssdMobilenetV3/*
+ssdMobilenetV3/
