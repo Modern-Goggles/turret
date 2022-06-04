@@ -99,11 +99,3 @@ class personDetector():
 
         # return smoothed position
         return self.xPos, self.yPos
-
-
-detector = personDetector(constants.NETWORK_WEIGHTS_PATH, constants.COCO_CLASS_NAMES, constants.NETWORK_CONFIG_PATH)
-
-detector.startCamera()
-while True:
-    x, y = detector.getDetectionPosSmooth()
-    print(x, y)
