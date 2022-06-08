@@ -3,6 +3,7 @@
 ## Current status
 
 As of current, the framerate of this script on a raspberry pi 3 is ~1FPS, i will solve this by either: 
+* Impliment a simpler detection alorithm, such as color masking and blobing,
 * Switching to a raspberry pi 4 and seeing if it runs fast enough, or 
 * Offloading the object detection to a more powerful computer
 
