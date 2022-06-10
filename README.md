@@ -2,10 +2,10 @@
 
 ## Current status
 
-As of current, the framerate of this script on a raspberry pi 3 is ~1FPS, i will solve this by either: 
-* Impliment a simpler detection alorithm, such as color masking and blobing,
-* Switching to a raspberry pi 4 and seeing if it runs fast enough, or 
-* Offloading the object detection to a more powerful computer
+I have implimented a networked person detection system in the networkedDetection branch. \
+as of right now the raspberry pi can run object detection in this way at about 30 FPS, which his more than enough.
+
+I do think it's kind of lame to have to have an extra coputer and a wifi network to run the turret, so in the future i will probably explore trying to detect people without the use of a neural net. perhaps i could do it with a color mask or something.
 
 The mechanical side of things is still in the design phase \
 once a physical design is chosen, motors are chosen, and an electrical layout is chosen, code for controlling motors and such will be developed
