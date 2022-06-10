@@ -5,16 +5,7 @@ REPO_DIR = ''
 
 ### configuration for detection
 
-# path to config file
-NETWORK_CONFIG_PATH = f"{REPO_DIR}/ssdMobilenetV3/ssd_mobilenet_v3_large_coco_2020_01_14.pbtxt"
+# ipv4 and port of the detection server
+DETECTION_SERVER_IP = ""
 
-# path to weights file
-NETWORK_WEIGHTS_PATH = f"{REPO_DIR}/ssdMobilenetV3/frozen_inference_graph.pb"
-
-# path to labls file
-LABELS_FILE = f"{REPO_DIR}/ssdMobilenetV3/coco.names"
-
-# extract coco class names
-COCO_CLASS_NAMES= []
-with open(LABELS_FILE,"rt") as f:
-    COCO_CLASS_NAMES = f.read().rstrip("\n").split("\n")
+DETECTION_SERVER_PORT = 12345

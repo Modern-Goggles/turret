@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 import constants
-from webcamDetection import personDetector
+from webcamDetection import networkedDetector
 #import sound
 
-detector = personDetector(constants.NETWORK_WEIGHTS_PATH, constants.COCO_CLASS_NAMES, constants.NETWORK_CONFIG_PATH)
+detector = networkedDetector(constants.DETECTION_SERVER_IP, constants.DETECTION_SERVER_PORT, 0)
 
 detector.startCamera()
-while True:
-    x, y = detector.getDetectionPosSmooth()
+while detector.isRunning:
+    x, y = detector.getDetectionPos(0.3)
     print(x, y)
