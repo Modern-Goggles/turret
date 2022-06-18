@@ -12,6 +12,8 @@ class turret():
         self.soundPlayer = soundPlayer(constants.SOUNDS_DIR)
         # repreive to give the target a chance to leave
         self.repreive = 3
+        # start up the turret
+        self.start()
     
     def start(self):
         '''Start up the turret'''
@@ -35,13 +37,13 @@ class turret():
         self.soundPlayer.targetSpotted()
 
     def targetLost(self):
-        '''called when a target is spotted'''
+        '''called when the target is lost'''
         # play a sound
         self.soundPlayer.targetLost()
 
     def loop(self):
         '''the main loop of the turret'''
-
+        # TODO make the target spotted/ lost system work on more than 2 frames to prevent flickers in detection from calling targatSpotted and such
         # start with no past detections
         lastDidDetect = False
 
@@ -67,6 +69,7 @@ class turret():
                 # try again
                 continue
             
+            print(xPos, yPos)
             # TODO mkae physical system to actually impliment this LOLOLOL
             # make motors turn so that coords are in the center of the webcam
 
@@ -74,3 +77,4 @@ class turret():
 
             # if the coords are close enough to the center, fire
 
+_turret = turret()
