@@ -44,7 +44,7 @@ class soundPlayer():
         # choose a sound
         soundFile = choice(listdir(f"{self.soundDir}/target_spotted"))
         # starrt playing it
-        if self.playSoundFile(soundFile):
+        if soundPlayer.playSoundFile(soundFile):
             # if the soundplay returned true
             # mark the time 
             self.lastSound = time()
@@ -63,7 +63,7 @@ class soundPlayer():
         # choose a sound
         soundFile = choice(listdir(f"{self.soundDir}/target_lost"))
         # starrt playing it
-        if self.playSoundFile(soundFile):
+        if soundPlayer.playSoundFile(soundFile):
             # if the soundplay returned true
             # mark the time 
             self.lastSound = time()
