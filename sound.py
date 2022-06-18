@@ -31,7 +31,7 @@ class soundPlayer():
         return True
 
     def playSound(self, soundFileName):
-        self.playSoundFile(f"{self.soundDir}/{soundFileName}")
+        soundPlayer.playSoundFile(f"{self.soundDir}/{soundFileName}")
 
     # TODO refactor these methods to reduce the ammount of repeated code
     def targetSpotted(self):
