@@ -1,7 +1,6 @@
 #!/bin/python3
-#runs detection on webcam and writes position to stdout for testing
+#runs detection on webcam and smooths coordinates of the resulting detection
 import cv2
-import constants
 
 # class to smooth out position of detection across frames to avoid shakey aim
 # basically just the moving average function
@@ -19,14 +18,20 @@ class smoother():
 # class for detecting people using computer vision on a given webcam
 class personDetector():
     def __init__(self, netWeights, netLabels, netConfig, smootherAlpha : float = 0.3):
+        # config variables
         self.weights = netWeights
         self.labels = netLabels
         self.config = netConfig
+        # camera capture object
         self.capture = None
+        # ddn detector object
         self.network = None
         self.initalizeNetwork()
+        # smoothers
         self.xSmoother = None
         self.ySmoother = None
+        # used to mark when detector is running
+        self.isRunning = False
 
     def initalizeNetwork(self):
         self.network = cv2.dnn_DetectionModel(self.weights, self.config)
@@ -34,6 +39,14 @@ class personDetector():
         self.network.setInputScale(1.0/ 127.5)
         self.network.setInputMean((127.5, 127.5, 127.5))
         self.network.setInputSwapRB(True)
+
+    def stop(self):
+        # if a camera is already reserved
+        if self.capture:
+            # release it 
+            self.capture.release()
+        # set to not running
+        self.isRunning = False
 
     def startCamera(self, cameraID : int = 0, resolution : tuple = (640, 480)):
         # if a camera is already reserved
@@ -46,6 +59,10 @@ class personDetector():
         # set the desired resolution
         self.capture.set(cv2.CAP_PROP_FRAME_WIDTH,resolution[0])
         self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT,resolution[1])
+        # set buffer to small value to minimize delay 
+        self.capture.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+        # mark as running 
+        self.isRunning = True
 
     def captureFrame(self):
         # make sure a camera capture is available
@@ -75,9 +92,9 @@ class personDetector():
                 xpos = box[0] + box[2]//2
                 # ypos = y coordinate + height // 2
                 ypos = box[1] + box[3]//2
-                return xpos, ypos
+                return True, xpos, ypos
         
-        return None, None
+        return False, None, None
 
     def getDetectionPosSmooth(self, ALPHA : float = 0.3, detectThreshold : float = 0.5):
         # initalize smoothers
@@ -91,11 +108,11 @@ class personDetector():
         x, y = self.getDetectionPos(detectThreshold)
 
         if x == None or y == None:
-            return None, None
+            return False, None, None
 
         # smooth over 1/ALPHA frames
         self.xPos = self.xSmoother.smooth(x)
         self.yPos = self.ySmoother.smooth(y)
 
         # return smoothed position
-        return self.xPos, self.yPos
+        return True, self.xPos, self.yPos
