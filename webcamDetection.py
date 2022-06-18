@@ -105,9 +105,9 @@ class personDetector():
             self.ySmoother = smoother(ALPHA)
 
         # get pos from 1 frame
-        x, y = self.getDetectionPos(detectThreshold)
+        didDetect, x, y = self.getDetectionPos(detectThreshold)
 
-        if x == None or y == None:
+        if not didDetect:
             return False, None, None
 
         # smooth over 1/ALPHA frames
