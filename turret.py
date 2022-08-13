@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import constants
 from webcamDetection import personDetector
-from sound import soundPlayer
+from sound import SoundPlayer, Alerts
 
 
 class turret():
@@ -9,9 +9,13 @@ class turret():
         # detector for finding people through the webcam
         self.detector = personDetector(constants.NETWORK_WEIGHTS_PATH, constants.COCO_CLASS_NAMES, constants.NETWORK_CONFIG_PATH)
         # for playing sounds
-        self.soundPlayer = soundPlayer(constants.SOUNDS_DIR)
+        self.soundPlayer = SoundPlayer(constants.SOUNDS_DIR)
         # repreive to give the target a chance to leave
         self.repreive = 3
+        # the number of consecutive frames required to lock on to a target
+        self.targetFramesLock = 10
+        # the threshold for losing a target
+        self.targetLosethreshold = 0.5 # if less than 50% of frames detect a person, lose the target
         # start up the turret
         self.start()
     
@@ -20,7 +24,7 @@ class turret():
         # start up camera
         self.detector.startCamera()
         # play a start up sound
-        self.soundPlayer.playSound("days_are_numbered.mp4")
+        self.soundPlayer.playAlert(Alerts.ACTIVATE)
         # start main loop
         self.loop()
     
@@ -29,47 +33,54 @@ class turret():
         # stop the detector
         self.detector.stop()
         # play shutdown sound
-        self.soundPlayer.playSound("end_of_it.mp4")
+        self.soundPlayer.playAlert(Alerts.DEACTIVATE)
 
     def targetSpotted(self):
         '''called when a target is spotted'''
         # play a sound
-        self.soundPlayer.targetSpotted()
+        self.soundPlayer.playAlert(Alerts.TARGET_SPOTTED)
 
     def targetLost(self):
         '''called when the target is lost'''
         # play a sound
-        self.soundPlayer.targetLost()
+        self.soundPlayer.playAlert(Alerts.TARGET_LOST)
 
     def loop(self):
         '''the main loop of the turret'''
-        # TODO make the target spotted/ lost system work on more than 2 frames to prevent flickers in detection from calling targatSpotted and such
-        # start with no past detections
-        lastDidDetect = False
+
+        # average of detection result over 10 frames, represents the confidence that a person has been detected
+        # ranges [0,1]
+        detectionAcumulator = 0
+
+        # keep track of if there is a current target
+        curTarget = False
 
         while self.detector.isRunning:
             # get detections
             didDetect, xPos, yPos = self.detector.getDetectionPosSmooth()
+            # use the moving average fomula to track the average detection over targetFramesLock frames
+            detectionAcumulator = (detectionAcumulator * (1-(1/self.targetFramesLock))) + (int( didDetect) * (1/self.targetFramesLock) )
 
-            # if there is a detection but there was not one last loop
-            if didDetect and didDetect != lastDidDetect:
-                # spotted a target
+            # if 100% of the past targetFramesLock frames had a detection
+            if ( detectionAcumulator > 0.99 ) & ( curTarget == False ):
+                # we've got a target
                 self.targetSpotted()
+                curTarget = True
+                pass
 
-            # if there is not a detection but there was one last loop
-            if not didDetect and didDetect != lastDidDetect:
+            # if less than targetLosethreshold of the past targetFramesLock frames had a detection
+            if ( detectionAcumulator < self.targetLosethreshold ) & curTarget:
                 # lost the target
                 self.targetLost()
-
-            # keep result of this detection so that changes can be detected next loop
-            lastDidDetect = didDetect
+                curTarget = False
+                pass
 
             # if no detections
             if not didDetect:
                 # try again
                 continue
             
-            print(xPos, yPos)
+            #print(xPos, yPos)
             # TODO mkae physical system to actually impliment this LOLOLOL
             # make motors turn so that coords are in the center of the webcam
 

@@ -1,17 +1,18 @@
+# this script is in charge of playing sounds, it
+
 from random import choice
 from subprocess import Popen, DEVNULL
 from os import listdir, path
-from time import time
-import constants
 
-class soundPlayer():
+class Alerts():
+    # the diferent types of alerts to play -> the different directories in the sounds dir
+    TARGET_SPOTTED  = "target_spotted.d"
+    TARGET_LOST     = "target_lost.d"
+    DEACTIVATE      = "deactivate.d"
+    ACTIVATE        = "activate.d"
+
+class SoundPlayer():
     def __init__(self, soundDir):
-        # time to wait after playing a sound before playing another
-        self.soundCooldown = 3
-
-        # the last time a sound was played
-        self.lastSound = 0
-
         # the directory for sounds
         self.soundDir = soundDir
 
@@ -31,43 +32,12 @@ class soundPlayer():
         return True
 
     def playSound(self, soundFileName):
-        soundPlayer.playSoundFile(f"{self.soundDir}/{soundFileName}")
+        SoundPlayer.playSoundFile(f"{self.soundDir}/{soundFileName}")
 
-    # TODO refactor these methods to reduce the ammount of repeated code
-    def targetSpotted(self):
-        '''play a sound signifying that a target has been spotted'''
-        # if the cooldawn has yet to pass
-        if time() - self.lastSound < self.soundCooldown:
-            # don't play a sound
-            return False
-        # if the cooldown has passed
-        # choose a sound
-        soundFile = choice(listdir(f"{self.soundDir}/target_spotted"))
-        # starrt playing it
-        if soundPlayer.playSoundFile(f"{self.soundDir}/target_spotted/{soundFile}"):
-            # if the soundplay returned true
-            # mark the time 
-            self.lastSound = time()
-            # pass through the true return to signify sucess
-            return True
-        # return false to signify failure
-        return False
-
-    def targetLost(self):
-        '''play a sound signifying that a target has been spotted'''
-        # if the cooldawn has yet to pass
-        if time() - self.lastSound < self.soundCooldown:
-            # don't play a sound
-            return False
-        # if the cooldown has passed
-        # choose a sound
-        soundFile = choice(listdir(f"{self.soundDir}/target_lost"))
-        # starrt playing it
-        if soundPlayer.playSoundFile(f"{self.soundDir}/target_lost/{soundFile}"):
-            # if the soundplay returned true
-            # mark the time 
-            self.lastSound = time()
-            # pass through the true return to signify sucess
-            return True
-        # return false to signify failure
-        return False
+    def playAlert(self, alertPath : str):
+        # choose a random sound from the apropriate directory
+        soundFile = choice(listdir(f"{self.soundDir}/{alertPath}"))
+        # get absolute path
+        soundFile = f"{self.soundDir}/{alertPath}/{soundFile}"
+        # play the sound
+        SoundPlayer.playSoundFile(soundFile)
